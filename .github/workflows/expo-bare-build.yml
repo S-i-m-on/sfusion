@@ -33,19 +33,28 @@ jobs:
           npm install -g yarn
           yarn install
 
+      # 🧹 5. Completely clean Gradle and node caches
+      - name: Clean environment
+        run: |
+          echo "🧹 Removing old Gradle and node caches..."
+          rm -rf ~/.gradle/caches ~/.gradle/daemon ~/.gradle/native ~/.gradle/wrapper
+          rm -rf android/app/build
+          rm -rf node_modules
+          yarn cache clean --all
+          yarn install
 
       # ✅ 6. Grant execution permission
       - name: Make gradlew executable
-        run: chmod +x gradlew
+        run: chmod +x android/gradlew
 
       # 🧼 7. Clean Gradle project
       - name: Gradle clean
-        working-directory: android-default-dialer
+        working-directory: android
         run: ./gradlew clean
 
       # 🚀 8. Build a completely fresh debug APK
       - name: Build debug APK
-        working-directory: android-default-dialer
+        working-directory: android
         run: ./gradlew assembleDebug --no-build-cache --rerun-tasks
 
       # 📦 9. Upload the built APK
@@ -53,7 +62,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-debug.apk
-          path: android-default-dialer/app/build/outputs/apk/debug/app-debug.apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
 
       # ✅ 10. Completion message
       - name: Show artifact URL
