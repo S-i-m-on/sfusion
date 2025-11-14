@@ -45,7 +45,7 @@ jobs:
 
       # ✅ 6. Grant execution permission
       - name: Make gradlew executable
-        run: chmod +x android/gradlew
+        run: chmod +x gradlew
 
       # 🧼 7. Clean Gradle project
       - name: Gradle clean
