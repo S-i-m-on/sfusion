@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Telephony / call related permissions -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -24,7 +25,16 @@
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
-    
+
+    <!-- Recommend adding call log & voicemail permissions if you want full dialer behavior -->
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
+    <uses-permission android:name="android.permission.ADD_VOICEMAIL"/>
+
+    <!-- Optional: declare telephony feature (not strictly required for default-dialer recognition,
+         but useful for Play Store filtering / feature declarations) -->
+    <uses-feature android:name="android.hardware.telephony" android:required="false"/>
+
     <queries>
         <intent>
             <action android:name="android.intent.action.VIEW"/>
@@ -63,6 +73,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             
+            <!-- Dialer / phone intent filters -->
             <intent-filter>
                 <action android:name="android.intent.action.DIAL" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -70,6 +81,20 @@
                 <data android:scheme="tel" />
             </intent-filter>
 
+            <!-- ACTION_CALL: allow handling direct call intents (requires CALL_PHONE permission) -->
+            <intent-filter>
+                <action android:name="android.intent.action.CALL" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="tel" />
+            </intent-filter>
+
+            <!-- Physical call button (optional) -->
+            <intent-filter>
+                <action android:name="android.intent.action.CALL_BUTTON" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!-- VIEW tel: URIs -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -77,6 +102,7 @@
                 <data android:scheme="tel" />
             </intent-filter>
 
+            <!-- App-specific URI schemes -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
